@@ -29,7 +29,7 @@
     this.init = () => {
       this.wrapper = $( '#wrapper' );
 
-      this.obj = $( '<div id="player" class="player"></div>' );
+      this.obj = $( '#player' );
       this.obj.bind( 'animationend', this.spinDone );
       this.wrapper.append( this.obj );
 

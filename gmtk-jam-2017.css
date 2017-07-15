@@ -1,7 +1,22 @@
 /*-----
 general
 -----*/
+.wrapper * {
+  border: 1px solid white;
+}
 
+.player,
+.absorb {
+  background-color: green;
+}
+
+.knockback {
+  background-color: yellow;
+}
+
+.danger {
+  background-color: red;
+}
 
 /*------
 specific
@@ -18,12 +33,37 @@ specific
 
 .player {
   position: absolute;
-  border: 1px solid white;
-  background-color: green;
 }
 
 @keyframes spin {
   100% {
-    transform: rotate( 360deg );
+    transform: rotate( -360deg );
   }
+}
+
+.player * {
+  position: inherit;
+}
+
+.bat {
+  background-color: blue;
+
+  width: 10px;
+  height: 100px;
+  left: 100%;
+  top: -150%;
+}
+
+.bat .absorb {
+  width: 10px;
+  height: 40px;
+  left: -10px;
+  top: 25px;
+}
+
+.bat .knockback {
+  width: 10px;
+  height: 30px;
+  left: -10px;
+  top: -15px;
 }
