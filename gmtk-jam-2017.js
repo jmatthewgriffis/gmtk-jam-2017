@@ -24,8 +24,8 @@
       this.player.update();
     }
 
-    this.getPosInWrapper = obj => {
-      let offset = obj.offset();
+    this.getPosInWrapper = html => {
+      let offset = html.offset();
 
       return {
         top: offset.top - this.wrapperPos.top,
@@ -42,9 +42,9 @@
     this.init = () => {
       this.wrapper = myGame.wrapper;
 
-      this.obj = $( '#player' );
-      this.obj.bind( 'animationend', this.spinDone );
-      this.wrapper.append( this.obj );
+      this.html = $( '#player' );
+      this.html.bind( 'animationend', this.spinDone );
+      this.wrapper.append( this.html );
 
       this.setSize();
       this.setPosition();
@@ -58,8 +58,8 @@
     };
 
     this.applySize = () => {
-      this.obj.width( this.size.x );
-      this.obj.height( this.size.y );
+      this.html.width( this.size.x );
+      this.html.height( this.size.y );
     }
 
     this.setSize = () => {
@@ -76,7 +76,7 @@
     }
 
     this.applyPosition = () => {
-      this.obj.css( {
+      this.html.css( {
         'top': this.pos.y - ( this.size.y * 0.5 ),
         'left': this.pos.x - ( this.size.x * 0.5 )
       } );
@@ -85,7 +85,7 @@
     this.setPosition = () => {
       this.pos = {
         x: this.wrapper.width() * 0.5,
-        y: this.wrapper.height() * 0.5
+        y: this.wrapper.height() * 0.75
       };
 
       this.applyPosition();
@@ -98,13 +98,13 @@
     this.spin = () => {
       if ( this.allowSpin ) {
         this.allowSpin = false;
-        this.obj.css( 'animation', 'spin 0.75s ease' );
+        this.html.css( 'animation', 'spin 0.75s ease' );
       }
     }
 
     this.spinDone = () => {
       this.allowSpin = true;
-      this.obj.css( 'animation', 'none' );
+      this.html.css( 'animation', 'none' );
     }
   }
 } )();
