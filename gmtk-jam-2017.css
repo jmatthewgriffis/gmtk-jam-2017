@@ -1,8 +1,26 @@
+/*--
+page
+--*/
+body {
+  background-color: gray;
+}
+
+.wrapper {
+  position: relative;
+  width: 1024px;
+  height: 768px;
+  margin: auto;
+  padding: 0;
+  background-color: black;
+  overflow: hidden;
+}
+
 /*-----
 general
 -----*/
 .wrapper * {
   border: 1px solid white;
+  position: absolute;
 }
 
 .player,
@@ -21,28 +39,10 @@ general
 /*------
 specific
 ------*/
-.wrapper {
-  position: relative;
-  width: 1024px;
-  height: 768px;
-  margin: auto;
-  padding: 0;
-  background-color: black;
-  overflow: hidden;
-}
-
-.player {
-  position: absolute;
-}
-
 @keyframes spin {
   100% {
     transform: rotate( -360deg );
   }
-}
-
-.player * {
-  position: inherit;
 }
 
 .bat {
