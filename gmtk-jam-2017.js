@@ -18,14 +18,11 @@
   }
 
   $( document ).keydown( () => {
-    if ( this.allowInput ) {
-      this.allowInput = false;
-      this.player.spin();
-    }
+    this.player.spin();
   } );
 
   $( document ).keyup( () => {
-    this.allowInput = true;
+    // 
   } );
 
   function player() {
@@ -38,6 +35,8 @@
 
       this.setSize();
       this.setPosition();
+      
+      this.allowSpin = true;
     };
 
     this.update = () => {
@@ -84,10 +83,14 @@
     }
 
     this.spin = () => {
-      this.obj.css( 'animation', 'spin 1s ease' );
+      if ( this.allowSpin ) {
+        this.allowSpin = false;
+        this.obj.css( 'animation', 'spin 0.75s ease' );
+      }
     }
 
     this.spinDone = () => {
+      this.allowSpin = true;
       this.obj.css( 'animation', 'none' );
     }
   }
