@@ -1,8 +1,12 @@
 ( () => {
+  let myGame;
+
   $( () => {
-    this.init();
+    myGame = new game();
+    myGame.init();
   } );
 
+  function game() {
   this.init = () => {
     this.frameRate = 30;
     this.updateLoopId = setInterval( this.update, 1000 / this.frameRate );
@@ -24,6 +28,7 @@
   $( document ).keyup( () => {
     // 
   } );
+  }
 
   function player() {
     this.init = () => {
