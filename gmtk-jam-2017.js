@@ -7,6 +7,9 @@
   } );
 
   function game() {
+    this.wrapper = $( '#wrapper' );
+    this.wrapperPos = this.wrapper.offset();
+
     this.init = () => {
       this.frameRate = 30;
       this.updateLoopId = setInterval( this.update, 1000 / this.frameRate );
@@ -21,18 +24,23 @@
       this.player.update();
     }
 
+    this.getPosInWrapper = obj => {
+      let offset = obj.offset();
+
+      return {
+        top: offset.top - this.wrapperPos.top,
+        left: offset.left - this.wrapperPos.left
+      }
+    }
+
     $( document ).keydown( () => {
       this.player.spin();
-    } );
-
-    $( document ).keyup( () => {
-      // 
     } );
   }
 
   function player() {
     this.init = () => {
-      this.wrapper = $( '#wrapper' );
+      this.wrapper = myGame.wrapper;
 
       this.obj = $( '#player' );
       this.obj.bind( 'animationend', this.spinDone );
@@ -40,7 +48,7 @@
 
       this.setSize();
       this.setPosition();
-      
+
       this.allowSpin = true;
     };
 
