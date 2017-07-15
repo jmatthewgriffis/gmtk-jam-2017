@@ -7,9 +7,17 @@ general
 specific
 ------*/
 .wrapper {
+  position: relative;
   width: 1024px;
   height: 768px;
   margin: auto;
   padding: 0;
   background-color: black;
+  overflow: hidden;
+}
+
+.player {
+  position: absolute;
+  border: 1px solid white;
+  background-color: green;
 }
