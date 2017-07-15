@@ -7,27 +7,27 @@
   } );
 
   function game() {
-  this.init = () => {
-    this.frameRate = 30;
-    this.updateLoopId = setInterval( this.update, 1000 / this.frameRate );
+    this.init = () => {
+      this.frameRate = 30;
+      this.updateLoopId = setInterval( this.update, 1000 / this.frameRate );
 
-    this.allowInput = true;
+      this.allowInput = true;
 
-    this.player = new player();
-    this.player.init();
-  }
+      this.player = new player();
+      this.player.init();
+    }
 
-  this.update = () => {
-    this.player.update();
-  }
+    this.update = () => {
+      this.player.update();
+    }
 
-  $( document ).keydown( () => {
-    this.player.spin();
-  } );
+    $( document ).keydown( () => {
+      this.player.spin();
+    } );
 
-  $( document ).keyup( () => {
-    // 
-  } );
+    $( document ).keyup( () => {
+      // 
+    } );
   }
 
   function player() {
