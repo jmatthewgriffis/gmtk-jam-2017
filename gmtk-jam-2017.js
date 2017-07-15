@@ -7,6 +7,8 @@
     this.frameRate = 30;
     this.updateLoopId = setInterval( this.update, 1000 / this.frameRate );
 
+    this.allowInput = true;
+
     this.player = new player();
     this.player.init();
   }
@@ -15,11 +17,23 @@
     this.player.update();
   }
 
+  $( document ).keydown( () => {
+    if ( this.allowInput ) {
+      this.allowInput = false;
+      this.player.spin();
+    }
+  } );
+
+  $( document ).keyup( () => {
+    this.allowInput = true;
+  } );
+
   function player() {
     this.init = () => {
       this.wrapper = $( '#wrapper' );
 
       this.obj = $( '<div id="player" class="player"></div>' );
+      this.obj.bind( 'animationend', this.spinDone );
       this.wrapper.append( this.obj );
 
       this.setSize();
@@ -46,11 +60,6 @@
     }
 
     this.updateSize = () => {
-      if ( this.pos.x >= 0 ) {
-        this.size.x += 1;
-        this.size.y += 1;
-      }
-
       this.applySize();
     }
 
@@ -71,11 +80,15 @@
     }
 
     this.updatePosition = () => {
-      if ( this.pos.x >= 0 ) {
-        this.pos.x -= 5;
-      }
-
       this.applyPosition();
+    }
+
+    this.spin = () => {
+      this.obj.css( 'animation', 'spin 1s ease' );
+    }
+
+    this.spinDone = () => {
+      this.obj.css( 'animation', 'none' );
     }
   }
 } )();

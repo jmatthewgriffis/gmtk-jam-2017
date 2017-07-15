@@ -21,3 +21,9 @@ specific
   border: 1px solid white;
   background-color: green;
 }
+
+@keyframes spin {
+  100% {
+    transform: rotate( 360deg );
+  }
+}
