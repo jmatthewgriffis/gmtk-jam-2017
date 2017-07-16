@@ -223,6 +223,8 @@
 
     this.init = () => {
       this.initBasic();
+
+      this.maxVel = 50;
     };
 
     this.update = () => {
@@ -237,6 +239,9 @@
           if ( ! this.isHit ) {
             this.isHit = true;
             this.vel.x *= -1.5;
+            if ( this.vel.x >= this.maxVel ) {
+              this.vel.x = this.maxVel;
+            }
           }
         } else {
           if ( this.isHit ) {
