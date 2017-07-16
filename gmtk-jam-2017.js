@@ -61,8 +61,11 @@
         $( '.paused' ).removeClass( 'paused' );
       }
 
-      this.updateStars()
-      this.gameObjects.forEach( obj => obj.update() );
+      this.updateStars();
+
+      this.gameObjects.forEach( obj => {
+        if ( ! obj.dead ) { obj.update(); }
+      } );
     }
 
     this.shakeDone = event => {
@@ -70,6 +73,18 @@
       if ( ! animation.match( 'screenshake' ) ) { return; }
 
       this.wrapper.html.css( 'animation', 'none' );
+
+      let removeGameObjects = [];
+
+      this.gameObjects.forEach( ( obj, index ) => {
+        if ( obj.dead ) {
+          obj.html.remove();
+          if ( obj.beamWeapon ) { obj.beamWeapon.beam.attackHitbox.html.remove(); }
+          removeGameObjects.push( index );
+        }
+      } );
+
+      removeGameObjects.forEach( index => this.gameObjects.splice( index, 1 ) );
 
       this.allowInput = true;
     }
@@ -107,7 +122,7 @@
       }
     }
 
-    this.impact = ( pauseFrames, screenshakeNum ) => {
+    this.impact = ( pauseFrames, screenshakeNum = undefined ) => {
       this.allowInput = false;
       this.pauseFrames = pauseFrames;
       $( '.animated' ).addClass( 'paused' );
@@ -141,7 +156,7 @@
 
     $( document ).keydown( () => {
       if ( ! this.allowInput ) { return; }
-      
+
       this.player.spin();
     } );
   } // end Game
@@ -219,6 +234,7 @@
       this.html.bind( 'animationend', this.spinDone );
       this.allowSpin = true;
       this.absorb = false;
+      this.dead = false;
 
       this.beamWeapon = new BeamWeapon();
       this.beamWeapon.init();
@@ -247,7 +263,7 @@
 
     this.spinDone = event => {
       let animation = event.originalEvent.animationName;
-      if ( animation !== 'spinCW' && animation !== 'spinCCW' ) { return; }
+      if ( ! animation.match( 'spinC' ) ) { return; }
 
       this.allowSpin = true;
       this.isSpinning = false;
@@ -407,6 +423,7 @@
       this.initBasic();
 
       this.maxVel = 50;
+      this.dead = false;
     };
 
     this.update = () => {
@@ -419,6 +436,9 @@
 
       if ( myGame.detectCollision( myGame.player, this ) ) {
         myGame.impact( 15, 3 );
+        this.dead = true;
+        myGame.player.dead = true;
+        myGame.player.html.css( 'background', 'none' );
       }
 
       if ( myGame.player.isSpinning ) {
