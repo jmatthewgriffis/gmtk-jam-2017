@@ -67,9 +67,11 @@
 
     this.shakeDone = event => {
       let animation = event.originalEvent.animationName;
-      if ( animation !== 'screenshake1' && animation !== 'screenshake2' ) { return; }
+      if ( ! animation.match( 'screenshake' ) ) { return; }
 
       this.wrapper.html.css( 'animation', 'none' );
+
+      this.allowInput = true;
     }
 
     this.addStar = ( offscreen = true ) => {
@@ -105,6 +107,13 @@
       }
     }
 
+    this.impact = ( pauseFrames, screenshakeNum ) => {
+      this.allowInput = false;
+      this.pauseFrames = pauseFrames;
+      $( '.animated' ).addClass( 'paused' );
+      this.wrapper.html.css( 'animation', `screenshake${ screenshakeNum ? screenshakeNum : ( this.player.absorb ? 2 : 1 ) } ${ 0.1 * pauseFrames }s ease` );
+    }
+
     this.detectCollision = ( obj1, obj2 ) => {
       let isCollision = false;
 
@@ -131,6 +140,8 @@
     }
 
     $( document ).keydown( () => {
+      if ( ! this.allowInput ) { return; }
+      
       this.player.spin();
     } );
   } // end Game
@@ -406,17 +417,19 @@
         this.vel.x *= -1;
       }
 
+      if ( myGame.detectCollision( myGame.player, this ) ) {
+        myGame.impact( 15, 3 );
+      }
+
       if ( myGame.player.isSpinning ) {
         if ( myGame.detectCollision( myGame.player.beamWeapon.beam.attackHitbox, this ) ) {
           if ( ! this.isHit ) {
+            myGame.impact( 3 );
             this.isHit = true;
             this.vel.x *= -1.5;
             if ( this.vel.x >= this.maxVel ) {
               this.vel.x = this.maxVel;
             }
-            myGame.pauseFrames = 3;
-            $( '.animated' ).addClass( 'paused' );
-            myGame.wrapper.html.css( 'animation', `screenshake${ myGame.player.absorb ? 2 : 1 } 0.25s ease` );
           }
         } else {
           if ( this.isHit ) {

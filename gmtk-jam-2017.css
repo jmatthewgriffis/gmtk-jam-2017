@@ -123,6 +123,16 @@ animations
   }
 }
 
+@keyframes screenshake3 {
+  33% {
+    left: -100px;
+  }
+
+  66% {
+    left: 100px;
+  }
+}
+
 .paused {
   animation-play-state: paused !important;
 }
