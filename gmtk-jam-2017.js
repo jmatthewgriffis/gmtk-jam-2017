@@ -179,7 +179,7 @@
 
       this.beamWeapon.beam.attackHitbox.html[ `${ this.absorb ? 'add' : 'remove' }Class` ]( 'ccw' );
       this.beamWeapon.beam.attackHitbox.html.css( 'animation', 'none' );
-      setTimeout( () => this.beamWeapon.beam.attackHitbox.html.css( 'animation', 'shield 2s linear' ) );
+      setTimeout( () => this.beamWeapon.beam.attackHitbox.html.css( 'animation', 'shield 2s ease' ) );
     }
 
     this.spinDone = event => {
@@ -348,6 +348,7 @@
 
     this.update = () => {
       this.updateBasic();
+      
       if ( ( this.pos.x < 0 && this.vel.x < 0 )
         || ( this.pos.x > myGame.wrapper.innerSize.x && this.vel.x > 0 ) ) {
         this.vel.x *= -1;
