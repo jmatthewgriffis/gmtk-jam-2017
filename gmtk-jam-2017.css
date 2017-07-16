@@ -56,27 +56,32 @@ specific
   }
 }
 
-.bat {
-  background-color: blue;
-
-  width: 10px;
+.weapon {
+  width: 15px;
   height: 100px;
   left: 100%;
   top: -150%;
 }
 
-.bat .absorb {
-  width: 10px;
-  height: 40px;
-  left: -10px;
-  top: 25px;
+.weapon .handle,
+.weapon .beam {
+  width: 100%;
 }
 
-.bat .knockback {
-  width: 10px;
-  height: 30px;
-  left: -10px;
-  top: -15px;
+.weapon .handle {
+  background-color: blue;
+
+  height: 30%;
+  bottom: 0;
+  left: 0;
+}
+
+.weapon .beam {
+  transition: background-color 0.5s;
+
+  height: 70%;
+  top: 0;
+  left: 0;
 }
 
 .enemy {
