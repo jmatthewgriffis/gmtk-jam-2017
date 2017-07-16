@@ -233,8 +233,15 @@
       }
 
       if ( myGame.player.isSpinning ) {
-          this.vel.x *= -1.5;
         if ( myGame.detectCollision( myGame.player.attackHitbox, this ) ) {
+          if ( ! this.isHit ) {
+            this.isHit = true;
+            this.vel.x *= -1.5;
+          }
+        } else {
+          if ( this.isHit ) {
+            this.isHit = false;
+          }
         }
       }
     };
