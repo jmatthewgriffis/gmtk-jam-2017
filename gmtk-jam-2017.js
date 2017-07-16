@@ -28,6 +28,11 @@
 
       this.allowInput = true;
 
+      // Set up starfield
+      this.starfield = $( '#stars' );
+      this.stars = [];
+      for ( let i = 0; i < 100; i++ ) { this.addStar( false ); }
+
       // Manage GameObjects
 
       this.gameObjects = [];
@@ -41,7 +46,32 @@
     }
 
     this.update = () => {
+      this.updateStars()
       this.gameObjects.forEach( obj => obj.update() );
+    }
+
+    this.addStar = ( offscreen = true ) => {
+      let x = offscreen ? -5 : 1 + Math.floor( ( Math.random() * ( myGame.wrapper.innerSize.x - 1 ) ) );
+      let y = 1 + Math.floor( ( Math.random() * ( myGame.wrapper.innerSize.y - 1 ) ) );
+      let star = $( `<div style="top: ${ y }px; left: ${ x }px;"></div>` );
+      this.starfield.append( star );
+      this.stars.push( star );
+    }
+
+    this.updateStars = () => {
+      this.stars.forEach( ( star, index ) => {
+        let x = parseInt( star.css( 'left' ) );
+        let xVel = 1;
+        x += xVel;
+
+        if ( x > myGame.wrapper.innerSize.x ) {
+          star.remove();
+          this.stars.splice( index, 1 );
+          this.addStar();
+        } else {
+          star.css( 'left', `${ x }px` );
+        }
+      } );
     }
 
     this.getPosInWrapper = obj => {
@@ -348,7 +378,7 @@
 
     this.update = () => {
       this.updateBasic();
-      
+
       if ( ( this.pos.x < 0 && this.vel.x < 0 )
         || ( this.pos.x > myGame.wrapper.innerSize.x && this.vel.x > 0 ) ) {
         this.vel.x *= -1;
