@@ -66,6 +66,10 @@ specific
   background-color: red;
 }
 
+.stars {
+  border: none;
+}
+
 /*--------
 animations
 --------*/
