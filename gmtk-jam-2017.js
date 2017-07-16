@@ -83,10 +83,10 @@
     } );
   } // end Game
 
-  function GameObject( html, size, pos, vel = { x: 0, y: 0 } ) {
+  function GameObject( html, size, pos, append = false, vel = { x: 0, y: 0 } ) {
     this.initBasic = () => {
       this.html = html;
-      myGame.wrapper.html.append( this.html );
+      if ( append ) { myGame.wrapper.html.append( this.html ); }
 
       this.vel = vel;
 
@@ -117,9 +117,11 @@
       this.pos.x += this.vel.x;
       this.pos.y += this.vel.y;
 
+      let borderW = parseInt( this.html.css( 'border-width' ) );
+
       this.html.css( {
-        'top': this.pos.y - this.size.y * 0.5,
-        'left': this.pos.x - this.size.x * 0.5
+        'top': this.pos.y - this.size.y * 0.5 - borderW,
+        'left': this.pos.x - this.size.x * 0.5 - borderW
       } );
     }
 
@@ -155,30 +157,14 @@
       this.allowSpin = true;
       this.absorb = false;
 
-      // Manage knockback
-
-      let knockback = {
-        html: $( '#beam' )
-      };
-
-      knockback.size = {
-        x: knockback.html.outerWidth(),
-        y: knockback.html.outerHeight()
-      };
-
-      knockback.pos = myGame.getPosInWrapper( knockback );
-
-      this.attackHitbox = {
-        pos: this.pos,
-        size: {
-          x: this.size.x + knockback.size.y * 1.9,
-          y: this.size.y + knockback.size.y * 1.9
-        }
-      };
+      this.beamWeapon = new BeamWeapon();
+      this.beamWeapon.init();
     };
 
     this.update = () => {
       this.updateBasic();
+
+      this.beamWeapon.update();
     };
 
     this.spin = () => {
@@ -188,8 +174,8 @@
       this.isSpinning = true;
       this.html.css( 'animation', `${ this.absorb ? 'spinCCW' : 'spinCW' } 0.25s ease` );
 
-      this.html.find( '#beam ').removeClass( this.absorb ? 'absorb' : 'knockback' );
-      this.html.find( '#beam ').addClass( this.absorb ? 'knockback' : 'absorb' );
+      this.beamWeapon.beam.html.removeClass( this.absorb ? 'absorb' : 'knockback' );
+      this.beamWeapon.beam.html.addClass( this.absorb ? 'knockback' : 'absorb' );
     }
 
     this.spinDone = () => {
@@ -202,6 +188,121 @@
   } // end Player
   Player.prototype = Object.create( GameObject.prototype );
   Player.prototype.constructor = Player;
+
+  function BeamWeapon() {
+    let html = $( '#weapon' );
+
+    let size = {
+      x: 15,
+      y: 100
+    };
+
+    let pos = {
+      x: myGame.player.size.x + size.x * 0.5,
+      y: -myGame.player.size.y * 0.5
+    };
+
+    GameObject.call( this, html, size, pos );
+
+    this.init = () => {
+      this.initBasic();
+
+      this.handle = new BeamWeaponHandle();
+      this.handle.init();
+
+      this.beam = new BeamWeaponBeam();
+      this.beam.init();
+    };
+
+    this.update = () => {
+      this.updateBasic();
+
+      this.handle.update();
+      this.beam.update();
+    };
+  } // end BeamWeapon
+  BeamWeapon.prototype = Object.create( GameObject.prototype );
+  BeamWeapon.prototype.constructor = BeamWeapon;
+
+  function BeamWeaponHandle() {
+    let html = $( '#handle' );
+
+    let size = {
+      x: myGame.player.beamWeapon.size.x,
+      y: myGame.player.beamWeapon.size.y * 0.3
+    };
+
+    let pos = {
+      x: size.x * 0.5,
+      y: myGame.player.beamWeapon.size.y - size.y * 0.5
+    };
+
+    GameObject.call( this, html, size, pos );
+
+    this.init = () => {
+      this.initBasic();
+    };
+
+    this.update = () => {
+      this.updateBasic();
+    };
+  } // end BeamWeaponHandle
+  BeamWeaponHandle.prototype = Object.create( GameObject.prototype );
+  BeamWeaponHandle.prototype.constructor = BeamWeaponHandle;
+
+  function BeamWeaponBeam() {
+    let html = $( '#beam' );
+
+    let size = {
+      x: myGame.player.beamWeapon.size.x,
+      y: myGame.player.beamWeapon.size.y * 0.7
+    };
+
+    let pos = {
+      x: size.x * 0.5,
+      y: size.y * 0.5
+    };
+
+    GameObject.call( this, html, size, pos );
+
+    this.init = () => {
+      this.initBasic();
+
+      this.attackHitbox = new BeamWeaponAttackHitbox();
+      this.attackHitbox.init();
+    };
+
+    this.update = () => {
+      this.updateBasic();
+
+      this.attackHitbox.update();
+    };
+  } // end BeamWeaponBeam
+  BeamWeaponBeam.prototype = Object.create( GameObject.prototype );
+  BeamWeaponBeam.prototype.constructor = BeamWeaponBeam;
+
+  function BeamWeaponAttackHitbox() {
+    let html = $( '#beamAttackHitbox' );
+
+    let size = {
+      x: myGame.player.size.x + myGame.player.beamWeapon.beam.size.y * 1.9,
+      y: myGame.player.size.y + myGame.player.beamWeapon.beam.size.y * 1.9
+    };
+
+    let pos = myGame.player.pos;
+
+    GameObject.call( this, html, size, pos );
+
+    this.init = () => {
+      this.initBasic();
+    };
+
+    this.update = () => {
+      this.updateBasic();
+    };
+  } // end BeamWeaponAttackHitbox
+  BeamWeaponAttackHitbox.prototype = Object.create( GameObject.prototype );
+  BeamWeaponAttackHitbox.prototype.constructor = BeamWeaponAttackHitbox;
 
   function Enemy() {
     let html = $( '.enemy.template' ).clone().removeClass( 'template' );
@@ -221,7 +322,7 @@
       y: 0
     }
 
-    GameObject.call( this, html, size, pos, vel );
+    GameObject.call( this, html, size, pos, true, vel );
 
     this.init = () => {
       this.initBasic();
@@ -237,7 +338,7 @@
       }
 
       if ( myGame.player.isSpinning ) {
-        if ( myGame.detectCollision( myGame.player.attackHitbox, this ) ) {
+        if ( myGame.detectCollision( myGame.player.beamWeapon.beam.attackHitbox, this ) ) {
           if ( ! this.isHit ) {
             this.isHit = true;
             this.vel.x *= -1.5;
