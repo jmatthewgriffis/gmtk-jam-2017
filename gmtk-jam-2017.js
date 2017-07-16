@@ -9,6 +9,10 @@
   function Game() {
     this.wrapper = $( '#wrapper' );
     this.wrapperPos = this.wrapper.offset();
+    this.wrapperSize = {
+      x: this.wrapper.width(),
+      y: this.wrapper.height()
+    };
 
     this.init = () => {
       this.frameRate = 30;
