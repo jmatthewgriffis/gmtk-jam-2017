@@ -152,6 +152,27 @@
       this.html.bind( 'animationend', this.spinDone );
       this.allowSpin = true;
       this.absorb = false;
+
+      // Manage knockback
+
+      let knockback = {
+        html: $( '#beam' )
+      };
+
+      knockback.size = {
+        x: knockback.html.outerWidth(),
+        y: knockback.html.outerHeight()
+      };
+
+      knockback.pos = myGame.getPosInWrapper( knockback );
+
+      this.attackHitbox = {
+        pos: this.pos,
+        size: {
+          x: this.size.x + knockback.size.y * 1.9,
+          y: this.size.y + knockback.size.y * 1.9
+        }
+      };
     };
 
     this.update = () => {
@@ -212,19 +233,8 @@
       }
 
       if ( myGame.player.isSpinning ) {
-        let knockback = {
-          html: $( '#knockback' )
-        };
-
-        knockback.size = {
-          x: knockback.html.outerWidth(),
-          y: knockback.html.outerHeight()
-        };
-
-        knockback.pos = myGame.getPosInWrapper( knockback );
-
-        if ( myGame.detectCollision( knockback, this ) ) {
           this.vel.x *= -1.5;
+        if ( myGame.detectCollision( myGame.player.attackHitbox, this ) ) {
         }
       }
     };
