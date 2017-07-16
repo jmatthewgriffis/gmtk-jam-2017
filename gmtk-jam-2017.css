@@ -7,6 +7,10 @@ body {
 
 .wrapper {
   position: relative;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   width: 1024px;
   height: 768px;
   margin: auto;
@@ -97,9 +101,25 @@ animations
   50% {
     opacity: 1
   }
+}
 
-  100% {
-    opacity: 0;
+@keyframes screenshake1 {
+  33% {
+    left: -10px;
+  }
+
+  66% {
+    left: 10px;
+  }
+}
+
+@keyframes screenshake2 {
+  33% {
+    left: 10px;
+  }
+
+  66% {
+    left: -10px;
   }
 }
 

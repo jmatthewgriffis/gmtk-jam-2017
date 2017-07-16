@@ -19,6 +19,8 @@
     };
 
     this.init = () => {
+      this.wrapper.html.bind( 'animationend', this.shakeDone );
+
       // Create update loop
 
       this.frameRate = 30;
@@ -61,6 +63,13 @@
 
       this.updateStars()
       this.gameObjects.forEach( obj => obj.update() );
+    }
+
+    this.shakeDone = event => {
+      let animation = event.originalEvent.animationName;
+      if ( animation !== 'screenshake1' && animation !== 'screenshake2' ) { return; }
+
+      this.wrapper.html.css( 'animation', 'none' );
     }
 
     this.addStar = ( offscreen = true ) => {
@@ -407,6 +416,7 @@
             }
             myGame.pauseFrames = 3;
             $( '.animated' ).addClass( 'paused' );
+            myGame.wrapper.html.css( 'animation', `screenshake${ myGame.player.absorb ? 2 : 1 } 0.25s ease` );
           }
         } else {
           if ( this.isHit ) {
