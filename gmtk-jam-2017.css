@@ -43,7 +43,13 @@ general
 /*------
 specific
 ------*/
-@keyframes spin {
+@keyframes spinCW {
+  100% {
+    transform: rotate( 360deg );
+  }
+}
+
+@keyframes spinCCW {
   100% {
     transform: rotate( -360deg );
   }

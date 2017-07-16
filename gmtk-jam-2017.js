@@ -139,6 +139,7 @@
 
       this.html.bind( 'animationend', this.spinDone );
       this.allowSpin = true;
+      this.absorb = false;
     };
 
     this.update = () => {
@@ -149,7 +150,7 @@
       if ( this.allowSpin ) {
         this.allowSpin = false;
         this.isSpinning = true;
-        this.html.css( 'animation', 'spin 0.75s ease' );
+        this.html.css( 'animation', `${ this.absorb ? 'spinCW' : 'spinCCW' } 0.75s ease` );
       }
     }
 
@@ -157,6 +158,7 @@
       this.allowSpin = true;
       this.isSpinning = false;
       this.html.css( 'animation', 'none' );
+      this.absorb = ! this.absorb;
     }
   } // end Player
   Player.prototype = Object.create( GameObject.prototype );
