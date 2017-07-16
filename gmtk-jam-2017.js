@@ -24,13 +24,27 @@
       this.player.update();
     }
 
-    this.getPosInWrapper = html => {
-      let offset = html.offset();
+    this.getPosInWrapper = obj => {
+      let offset = obj.html.offset();
 
       return {
-        top: offset.top - this.wrapperPos.top,
-        left: offset.left - this.wrapperPos.left
+        x: offset.left - this.wrapperPos.left + obj.size.x * 0.5,
+        y: offset.top - this.wrapperPos.top + obj.size.y * 0.5
       }
+    }
+
+    this.detectCollision = ( obj1, obj2 ) => {
+      let isCollision = false;
+
+      if ( obj1.pos.x + obj1.size.x * 0.5 > obj2.pos.x - obj2.size.x * 0.5
+        && obj1.pos.x - obj1.size.x * 0.5 < obj2.pos.x + obj2.size.x * 0.5
+        && obj1.pos.y + obj1.size.y * 0.5 > obj2.pos.y - obj2.size.y * 0.5
+        && obj1.pos.y - obj1.size.y * 0.5 < obj2.pos.y + obj2.size.y * 0.5
+      ) {
+        isCollision = true;
+      }
+
+      return isCollision;
     }
 
     $( document ).keydown( () => {
@@ -55,6 +69,35 @@
     this.update = () => {
       this.updateSize()
       this.updatePosition();
+
+      if ( this.isSpinning ) {
+        let enemy = {
+          html: $( '.enemy' )
+        };
+
+        enemy.size = {
+          x: enemy.html.width(),
+          y: enemy.html.height()
+        };
+
+        enemy.pos = myGame.getPosInWrapper( enemy );
+
+        let knockback = {
+          html: $( '#knockback' )
+        };
+
+        knockback.size = {
+          x: knockback.html.width(),
+          y: knockback.html.height()
+        };
+
+        knockback.pos = myGame.getPosInWrapper( knockback );
+
+        if ( myGame.detectCollision( knockback, enemy ) ) {
+          console.log('hit!')
+          enemy.html.css('left', 10);
+        }
+      }
     };
 
     this.applySize = () => {
@@ -77,8 +120,8 @@
 
     this.applyPosition = () => {
       this.html.css( {
-        'top': this.pos.y - ( this.size.y * 0.5 ),
-        'left': this.pos.x - ( this.size.x * 0.5 )
+        'top': this.pos.y - this.size.y * 0.5,
+        'left': this.pos.x - this.size.x * 0.5
       } );
     }
 
@@ -98,12 +141,14 @@
     this.spin = () => {
       if ( this.allowSpin ) {
         this.allowSpin = false;
+        this.isSpinning = true;
         this.html.css( 'animation', 'spin 0.75s ease' );
       }
     }
 
     this.spinDone = () => {
       this.allowSpin = true;
+      this.isSpinning = false;
       this.html.css( 'animation', 'none' );
     }
   }

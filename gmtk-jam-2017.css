@@ -67,3 +67,11 @@ specific
   left: -10px;
   top: -15px;
 }
+
+.enemy {
+  width: 30px;
+  height: 30px;
+  background-color: red;
+  top: 560px;
+  left: 390px;
+}
