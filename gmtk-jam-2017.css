@@ -44,6 +44,31 @@ general
 /*------
 specific
 ------*/
+.weapon .handle {
+  background-color: blue;
+}
+
+.weapon .beam {
+  transition: background-color 0.5s;
+}
+
+.beamAttackHitbox {
+  border: 2px inset red;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.beamAttackHitbox.ccw {
+  border-style: outset;
+}
+
+.enemy {
+  background-color: red;
+}
+
+/*--------
+animations
+--------*/
 @keyframes spinCW {
   100% {
     transform: rotate( 360deg );
@@ -56,14 +81,20 @@ specific
   }
 }
 
-.weapon .handle {
-  background-color: blue;
-}
+@keyframes shield {
+  15% {
+    opacity: 0
+  }
 
-.weapon .beam {
-  transition: background-color 0.5s;
-}
+  25% {
+    opacity: 1
+  }
 
-.enemy {
-  background-color: red;
+  50% {
+    opacity: 1
+  }
+
+  100% {
+    opacity: 0;
+  }
 }

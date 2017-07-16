@@ -176,9 +176,16 @@
 
       this.beamWeapon.beam.html.removeClass( this.absorb ? 'absorb' : 'knockback' );
       this.beamWeapon.beam.html.addClass( this.absorb ? 'knockback' : 'absorb' );
+
+      this.beamWeapon.beam.attackHitbox.html[ `${ this.absorb ? 'add' : 'remove' }Class` ]( 'ccw' );
+      this.beamWeapon.beam.attackHitbox.html.css( 'animation', 'none' );
+      setTimeout( () => this.beamWeapon.beam.attackHitbox.html.css( 'animation', 'shield 2s linear' ) );
     }
 
-    this.spinDone = () => {
+    this.spinDone = event => {
+      let animation = event.originalEvent.animationName;
+      if ( animation !== 'spinCW' && animation !== 'spinCCW' ) { return; }
+
       this.allowSpin = true;
       this.isSpinning = false;
       this.html.css( 'animation', 'none' );
@@ -295,11 +302,20 @@
 
     this.init = () => {
       this.initBasic();
+
+      this.html.bind( 'animationend', this.shieldDone );
     };
 
     this.update = () => {
       this.updateBasic();
     };
+
+    this.shieldDone = event => {
+      let animation = event.originalEvent.animationName;
+      if ( animation !== 'shield' ) { return; }
+
+      this.html.css( 'animation', 'none' );
+    }
   } // end BeamWeaponAttackHitbox
   BeamWeaponAttackHitbox.prototype = Object.create( GameObject.prototype );
   BeamWeaponAttackHitbox.prototype.constructor = BeamWeaponAttackHitbox;
