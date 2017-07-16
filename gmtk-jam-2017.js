@@ -406,8 +406,7 @@
               this.vel.x = this.maxVel;
             }
             myGame.pauseFrames = 3;
-            myGame.player.html.addClass( 'paused' );
-            myGame.player.beamWeapon.beam.attackHitbox.html.addClass( 'paused' );
+            $( '.animated' ).addClass( 'paused' );
           }
         } else {
           if ( this.isHit ) {
