@@ -36,6 +36,10 @@ general
   background-color: red;
 }
 
+.template {
+  display: none;
+}
+
 /*------
 specific
 ------*/
@@ -69,9 +73,5 @@ specific
 }
 
 .enemy {
-  width: 30px;
-  height: 30px;
   background-color: red;
-  top: 560px;
-  left: 390px;
 }

@@ -15,17 +15,29 @@
     };
 
     this.init = () => {
+      // Create update loop
+
       this.frameRate = 30;
       this.updateLoopId = setInterval( this.update, 1000 / this.frameRate );
 
+      // Misc.
+
       this.allowInput = true;
 
+      // Manage GameObjects
+
+      this.gameObjects = [];
+
       this.player = new Player();
-      this.player.init();
+      this.gameObjects.push( this.player );
+
+      this.gameObjects.push( new Enemy() );
+
+      this.gameObjects.forEach( obj => obj.init() );
     }
 
     this.update = () => {
-      this.player.update();
+      this.gameObjects.forEach( obj => obj.update() );
     }
 
     this.getPosInWrapper = obj => {
@@ -127,35 +139,6 @@
 
     this.update = () => {
       this.updateBasic();
-
-      if ( this.isSpinning ) {
-        let enemy = {
-          html: $( '.enemy' )
-        };
-
-        enemy.size = {
-          x: enemy.html.width(),
-          y: enemy.html.height()
-        };
-
-        enemy.pos = myGame.getPosInWrapper( enemy );
-
-        let knockback = {
-          html: $( '#knockback' )
-        };
-
-        knockback.size = {
-          x: knockback.html.width(),
-          y: knockback.html.height()
-        };
-
-        knockback.pos = myGame.getPosInWrapper( knockback );
-
-        if ( myGame.detectCollision( knockback, enemy ) ) {
-          console.log('hit!')
-          enemy.html.css('left', 10);
-        }
-      }
     };
 
     this.spin = () => {
@@ -174,4 +157,48 @@
   } // end Player
   Player.prototype = Object.create( GameObject.prototype );
   Player.prototype.constructor = Player;
+
+  function Enemy() {
+    let html = $( '.enemy.template' ).clone().removeClass( 'template' );
+
+    let size = {
+      x: 30,
+      y: 30
+    };
+
+    let pos = {
+      x: myGame.wrapperSize.x * 0.4,
+      y: myGame.wrapperSize.y * 0.75
+    };
+
+    GameObject.call( this, html, size, pos );
+
+    this.init = () => {
+      this.initBasic();
+    };
+
+    this.update = () => {
+      this.updateBasic();
+
+      if ( myGame.player.isSpinning ) {
+        let knockback = {
+          html: $( '#knockback' )
+        };
+
+        knockback.size = {
+          x: knockback.html.width(),
+          y: knockback.html.height()
+        };
+
+        knockback.pos = myGame.getPosInWrapper( knockback );
+
+        if ( myGame.detectCollision( knockback, this ) ) {
+          console.log('hit!')
+          this.pos.x = 10;
+        }
+      }
+    };
+  } // end Enemy
+  Enemy.prototype = Object.create( GameObject.prototype );
+  Enemy.prototype.constructor = Enemy;
 } )();
