@@ -113,14 +113,14 @@
       } );
     }
 
-    this.getPosInWrapper = obj => {
-      let offset = obj.html.offset();
+    // this.getPosInWrapper = obj => {
+    //   let offset = obj.html.offset();
 
-      return {
-        x: offset.left - this.wrapper.absPos.left + obj.size.x * 0.5,
-        y: offset.top - this.wrapper.absPos.top + obj.size.y * 0.5
-      }
-    }
+    //   return {
+    //     x: offset.left - this.wrapper.absPos.left + obj.size.x * 0.5,
+    //     y: offset.top - this.wrapper.absPos.top + obj.size.y * 0.5
+    //   }
+    // }
 
     this.impact = ( pauseFrames, screenshakeNum = undefined ) => {
       this.allowInput = false;
