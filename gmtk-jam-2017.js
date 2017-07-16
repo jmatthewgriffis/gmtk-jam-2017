@@ -54,7 +54,7 @@
     $( document ).keydown( () => {
       this.player.spin();
     } );
-  }
+  } // end Game
 
   function GameObject( html, size, pos ) {
     this.initBasic = () => {
@@ -101,7 +101,7 @@
     this.updatePosition = () => {
       this.applyPosition();
     }
-  }
+  } // end GameObject
 
   function Player() {
     let html = $( '#player' );
@@ -171,7 +171,7 @@
       this.isSpinning = false;
       this.html.css( 'animation', 'none' );
     }
-  }
+  } // end Player
   Player.prototype = Object.create( GameObject.prototype );
   Player.prototype.constructor = Player;
 } )();
