@@ -189,12 +189,12 @@
     };
 
     let pos = {
-      x: myGame.wrapperSize.x * 0,
+      x: myGame.wrapperSize.x * 1,
       y: myGame.wrapperSize.y * 0.75
     };
 
     let vel = {
-      x: 5,
+      x: -5,
       y: 0
     }
 
