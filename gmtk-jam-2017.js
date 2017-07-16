@@ -52,14 +52,26 @@
     this.detectCollision = ( obj1, obj2 ) => {
       let isCollision = false;
 
-      if ( obj1.pos.x + obj1.size.x * 0.5 > obj2.pos.x - obj2.size.x * 0.5
-        && obj1.pos.x - obj1.size.x * 0.5 < obj2.pos.x + obj2.size.x * 0.5
-        && obj1.pos.y + obj1.size.y * 0.5 > obj2.pos.y - obj2.size.y * 0.5
-        && obj1.pos.y - obj1.size.y * 0.5 < obj2.pos.y + obj2.size.y * 0.5 ) {
+      let obj1Edges = getEdges( obj1 );
+      let obj2Edges = getEdges( obj2 );
+
+      if ( obj1Edges.right > obj2Edges.left
+        && obj1Edges.left < obj2Edges.right
+        && obj1Edges.bottom > obj2Edges.top
+        && obj1Edges.top < obj2Edges.bottom ) {
         isCollision = true;
       }
 
       return isCollision;
+    }
+
+    function getEdges( obj ) {
+      return {
+        top: obj.pos.y - obj.size.y * 0.5,
+        right: obj.pos.x + obj.size.x * 0.5,
+        bottom: obj.pos.y + obj.size.y * 0.5,
+        left: obj.pos.x - obj.size.x * 0.5
+      };
     }
 
     $( document ).keydown( () => {
