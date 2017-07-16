@@ -7,11 +7,15 @@
   } );
 
   function Game() {
-    this.wrapper = $( '#wrapper' );
-    this.wrapperPosAbs = this.wrapper.offset();
-    this.wrapperSize = {
-      x: this.wrapper.width(),
-      y: this.wrapper.height()
+    let wrapper = $( '#wrapper' );
+
+    this.wrapper = {
+      html: wrapper,
+      absPos: wrapper.offset(),
+      innerSize: {
+        x: wrapper.width(),
+        y: wrapper.height()
+      }
     };
 
     this.init = () => {
@@ -44,8 +48,8 @@
       let offset = obj.html.offset();
 
       return {
-        x: offset.left - this.wrapperPosAbs.left + obj.size.x * 0.5,
-        y: offset.top - this.wrapperPosAbs.top + obj.size.y * 0.5
+        x: offset.left - this.wrapper.absPos.left + obj.size.x * 0.5,
+        y: offset.top - this.wrapper.absPos.top + obj.size.y * 0.5
       }
     }
 
@@ -81,10 +85,8 @@
 
   function GameObject( html, size, pos, vel = { x: 0, y: 0 } ) {
     this.initBasic = () => {
-      this.wrapper = myGame.wrapper;
-
       this.html = html;
-      this.wrapper.append( this.html );
+      myGame.wrapper.html.append( this.html );
 
       this.vel = vel;
 
@@ -140,8 +142,8 @@
     };
 
     let pos = {
-      x: myGame.wrapperSize.x * 0.5,
-      y: myGame.wrapperSize.y * 0.75
+      x: myGame.wrapper.innerSize.x * 0.5,
+      y: myGame.wrapper.innerSize.y * 0.75
     };
 
     GameObject.call( this, html, size, pos );
@@ -181,7 +183,7 @@
 
     this.spin = () => {
       if ( ! this.allowSpin ) { return; }
-      
+
       this.allowSpin = false;
       this.isSpinning = true;
       this.html.css( 'animation', `${ this.absorb ? 'spinCCW' : 'spinCW' } 0.25s ease` );
@@ -210,8 +212,8 @@
     };
 
     let pos = {
-      x: myGame.wrapperSize.x * 1,
-      y: myGame.wrapperSize.y * 0.75
+      x: myGame.wrapper.innerSize.x * 1,
+      y: myGame.wrapper.innerSize.y * 0.75
     };
 
     let vel = {
@@ -230,7 +232,7 @@
     this.update = () => {
       this.updateBasic();
       if ( ( this.pos.x < 0 && this.vel.x < 0 )
-        || ( this.pos.x > myGame.wrapperSize.x && this.vel.x > 0 ) ) {
+        || ( this.pos.x > myGame.wrapper.innerSize.x && this.vel.x > 0 ) ) {
         this.vel.x *= -1;
       }
 
