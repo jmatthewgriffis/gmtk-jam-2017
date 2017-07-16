@@ -102,3 +102,7 @@ animations
     opacity: 0;
   }
 }
+
+.paused {
+  animation-play-state: paused !important;
+}

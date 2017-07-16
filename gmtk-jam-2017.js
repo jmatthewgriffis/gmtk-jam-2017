@@ -27,6 +27,8 @@
       // Misc.
 
       this.allowInput = true;
+      this.pauseFrames = 0;
+      this.pauseFramesPrev = this.pauseFrames;
 
       // Set up starfield
       this.starfield = $( '#stars' );
@@ -46,6 +48,17 @@
     }
 
     this.update = () => {
+      if ( this.pauseFrames ) {
+        this.pauseFramesPrev = this.pauseFrames;
+        this.pauseFrames -= 1;
+        return;
+      }
+
+      if ( this.pauseFramesPrev ) {
+        this.pauseFramesPrev = this.pauseFrames;
+        $( '.paused' ).removeClass( 'paused' );
+      }
+
       this.updateStars()
       this.gameObjects.forEach( obj => obj.update() );
     }
@@ -392,6 +405,9 @@
             if ( this.vel.x >= this.maxVel ) {
               this.vel.x = this.maxVel;
             }
+            myGame.pauseFrames = 3;
+            myGame.player.html.addClass( 'paused' );
+            myGame.player.beamWeapon.beam.attackHitbox.html.addClass( 'paused' );
           }
         } else {
           if ( this.isHit ) {
