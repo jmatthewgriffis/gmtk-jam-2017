@@ -8,7 +8,7 @@
 
   function Game() {
     this.wrapper = $( '#wrapper' );
-    this.wrapperPos = this.wrapper.offset();
+    this.wrapperPosAbs = this.wrapper.offset();
     this.wrapperSize = {
       x: this.wrapper.width(),
       y: this.wrapper.height()
@@ -32,8 +32,8 @@
       let offset = obj.html.offset();
 
       return {
-        x: offset.left - this.wrapperPos.left + obj.size.x * 0.5,
-        y: offset.top - this.wrapperPos.top + obj.size.y * 0.5
+        x: offset.left - this.wrapperPosAbs.left + obj.size.x * 0.5,
+        y: offset.top - this.wrapperPosAbs.top + obj.size.y * 0.5
       }
     }
 
