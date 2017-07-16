@@ -150,7 +150,10 @@
       if ( this.allowSpin ) {
         this.allowSpin = false;
         this.isSpinning = true;
-        this.html.css( 'animation', `${ this.absorb ? 'spinCW' : 'spinCCW' } 0.75s ease` );
+        this.html.css( 'animation', `${ this.absorb ? 'spinCCW' : 'spinCW' } 0.25s ease` );
+
+        this.html.find( '#beam ').removeClass( this.absorb ? 'absorb' : 'knockback' );
+        this.html.find( '#beam ').addClass( this.absorb ? 'knockback' : 'absorb' );
       }
     }
 
@@ -158,6 +161,7 @@
       this.allowSpin = true;
       this.isSpinning = false;
       this.html.css( 'animation', 'none' );
+
       this.absorb = ! this.absorb;
     }
   } // end Player
