@@ -56,23 +56,77 @@
     } );
   }
 
-  function Player() {
-    this.init = () => {
+  function GameObject( html, size, pos ) {
+    this.initBasic = () => {
       this.wrapper = myGame.wrapper;
 
-      this.html = $( '#player' );
-      this.html.bind( 'animationend', this.spinDone );
+      this.html = html;
       this.wrapper.append( this.html );
 
       this.setSize();
       this.setPosition();
+    };
 
+    this.updateBasic = () => {
+      this.updateSize()
+      this.updatePosition();
+    };
+
+    this.applySize = () => {
+      this.html.width( this.size.x );
+      this.html.height( this.size.y );
+    }
+
+    this.setSize = () => {
+      this.size = size;
+      this.applySize();
+    }
+
+    this.updateSize = () => {
+      this.applySize();
+    }
+
+    this.applyPosition = () => {
+      this.html.css( {
+        'top': this.pos.y - this.size.y * 0.5,
+        'left': this.pos.x - this.size.x * 0.5
+      } );
+    }
+
+    this.setPosition = () => {
+      this.pos = pos;
+      this.applyPosition();
+    }
+
+    this.updatePosition = () => {
+      this.applyPosition();
+    }
+  }
+
+  function Player() {
+    let html = $( '#player' );
+
+    let size = {
+      x: 50,
+      y: 50
+    };
+
+    let pos = {
+      x: myGame.wrapperSize.x * 0.5,
+      y: myGame.wrapperSize.y * 0.75
+    };
+
+    GameObject.call( this, html, size, pos );
+
+    this.init = () => {
+      this.initBasic();
+
+      this.html.bind( 'animationend', this.spinDone );
       this.allowSpin = true;
     };
 
     this.update = () => {
-      this.updateSize()
-      this.updatePosition();
+      this.updateBasic();
 
       if ( this.isSpinning ) {
         let enemy = {
@@ -104,44 +158,6 @@
       }
     };
 
-    this.applySize = () => {
-      this.html.width( this.size.x );
-      this.html.height( this.size.y );
-    }
-
-    this.setSize = () => {
-      this.size = {
-        x: 50,
-        y: 50
-      };
-
-      this.applySize();
-    }
-
-    this.updateSize = () => {
-      this.applySize();
-    }
-
-    this.applyPosition = () => {
-      this.html.css( {
-        'top': this.pos.y - this.size.y * 0.5,
-        'left': this.pos.x - this.size.x * 0.5
-      } );
-    }
-
-    this.setPosition = () => {
-      this.pos = {
-        x: this.wrapper.width() * 0.5,
-        y: this.wrapper.height() * 0.75
-      };
-
-      this.applyPosition();
-    }
-
-    this.updatePosition = () => {
-      this.applyPosition();
-    }
-
     this.spin = () => {
       if ( this.allowSpin ) {
         this.allowSpin = false;
@@ -156,4 +172,6 @@
       this.html.css( 'animation', 'none' );
     }
   }
+  Player.prototype = Object.create( GameObject.prototype );
+  Player.prototype.constructor = Player;
 } )();
