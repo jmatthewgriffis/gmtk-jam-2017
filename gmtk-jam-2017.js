@@ -55,8 +55,7 @@
       if ( obj1.pos.x + obj1.size.x * 0.5 > obj2.pos.x - obj2.size.x * 0.5
         && obj1.pos.x - obj1.size.x * 0.5 < obj2.pos.x + obj2.size.x * 0.5
         && obj1.pos.y + obj1.size.y * 0.5 > obj2.pos.y - obj2.size.y * 0.5
-        && obj1.pos.y - obj1.size.y * 0.5 < obj2.pos.y + obj2.size.y * 0.5
-      ) {
+        && obj1.pos.y - obj1.size.y * 0.5 < obj2.pos.y + obj2.size.y * 0.5 ) {
         isCollision = true;
       }
 
@@ -68,12 +67,14 @@
     } );
   } // end Game
 
-  function GameObject( html, size, pos ) {
+  function GameObject( html, size, pos, vel = { x: 0, y: 0 } ) {
     this.initBasic = () => {
       this.wrapper = myGame.wrapper;
 
       this.html = html;
       this.wrapper.append( this.html );
+
+      this.vel = vel;
 
       this.setSize();
       this.setPosition();
@@ -99,6 +100,9 @@
     }
 
     this.applyPosition = () => {
+      this.pos.x += this.vel.x;
+      this.pos.y += this.vel.y;
+
       this.html.css( {
         'top': this.pos.y - this.size.y * 0.5,
         'left': this.pos.x - this.size.x * 0.5
@@ -167,11 +171,16 @@
     };
 
     let pos = {
-      x: myGame.wrapperSize.x * 0.4,
+      x: myGame.wrapperSize.x * 0,
       y: myGame.wrapperSize.y * 0.75
     };
 
-    GameObject.call( this, html, size, pos );
+    let vel = {
+      x: 5,
+      y: 0
+    }
+
+    GameObject.call( this, html, size, pos, vel );
 
     this.init = () => {
       this.initBasic();
@@ -179,6 +188,10 @@
 
     this.update = () => {
       this.updateBasic();
+      if ( ( this.pos.x < 0 && this.vel.x < 0 )
+        || ( this.pos.x > myGame.wrapperSize.x && this.vel.x > 0 ) ) {
+        this.vel.x *= -1;
+      }
 
       if ( myGame.player.isSpinning ) {
         let knockback = {
@@ -193,8 +206,7 @@
         knockback.pos = myGame.getPosInWrapper( knockback );
 
         if ( myGame.detectCollision( knockback, this ) ) {
-          console.log('hit!')
-          this.pos.x = 10;
+          this.vel.x *= -1.5;
         }
       }
     };
