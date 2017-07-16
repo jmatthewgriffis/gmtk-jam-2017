@@ -2,11 +2,11 @@
   let myGame;
 
   $( () => {
-    myGame = new game();
+    myGame = new Game();
     myGame.init();
   } );
 
-  function game() {
+  function Game() {
     this.wrapper = $( '#wrapper' );
     this.wrapperPos = this.wrapper.offset();
 
@@ -16,7 +16,7 @@
 
       this.allowInput = true;
 
-      this.player = new player();
+      this.player = new Player();
       this.player.init();
     }
 
@@ -52,7 +52,7 @@
     } );
   }
 
-  function player() {
+  function Player() {
     this.init = () => {
       this.wrapper = myGame.wrapper;
 
