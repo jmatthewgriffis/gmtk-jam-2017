@@ -180,14 +180,14 @@
     };
 
     this.spin = () => {
-      if ( this.allowSpin ) {
-        this.allowSpin = false;
-        this.isSpinning = true;
-        this.html.css( 'animation', `${ this.absorb ? 'spinCCW' : 'spinCW' } 0.25s ease` );
+      if ( ! this.allowSpin ) { return; }
+      
+      this.allowSpin = false;
+      this.isSpinning = true;
+      this.html.css( 'animation', `${ this.absorb ? 'spinCCW' : 'spinCW' } 0.25s ease` );
 
-        this.html.find( '#beam ').removeClass( this.absorb ? 'absorb' : 'knockback' );
-        this.html.find( '#beam ').addClass( this.absorb ? 'knockback' : 'absorb' );
-      }
+      this.html.find( '#beam ').removeClass( this.absorb ? 'absorb' : 'knockback' );
+      this.html.find( '#beam ').addClass( this.absorb ? 'knockback' : 'absorb' );
     }
 
     this.spinDone = () => {
