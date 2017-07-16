@@ -86,8 +86,8 @@
     };
 
     this.applySize = () => {
-      this.html.width( this.size.x );
-      this.html.height( this.size.y );
+      this.html.outerWidth( this.size.x );
+      this.html.outerHeight( this.size.y );
     }
 
     this.setSize = () => {
@@ -201,8 +201,8 @@
         };
 
         knockback.size = {
-          x: knockback.html.width(),
-          y: knockback.html.height()
+          x: knockback.html.outerWidth(),
+          y: knockback.html.outerHeight()
         };
 
         knockback.pos = myGame.getPosInWrapper( knockback );
