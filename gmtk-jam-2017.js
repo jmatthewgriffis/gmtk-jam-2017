@@ -447,8 +447,12 @@
             myGame.impact( 3 );
             this.isHit = true;
             this.vel.x *= -1.5;
+            this.vel.y *= -1.5;
             if ( this.vel.x >= this.maxVel ) {
               this.vel.x = this.maxVel;
+            }
+            if ( this.vel.y >= this.maxVel ) {
+              this.vel.y = this.maxVel;
             }
           }
         } else {
