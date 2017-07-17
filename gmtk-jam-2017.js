@@ -43,10 +43,12 @@
 
       this.player = new Player();
       this.gameObjects.push( this.player );
+      this.player.init();
 
-      this.gameObjects.push( new Enemy() );
+      this.numEnemies = 0;
+      this.addEnemy();
 
-      this.gameObjects.forEach( obj => obj.init() );
+      this.gameObjects.filter( obj => ! obj.beamWeapon ).forEach( obj => obj.init() );
     }
 
     this.update = () => {
@@ -117,6 +119,38 @@
           star.css( 'left', `${ x }px` );
         }
       } );
+    }
+
+    this.addEnemy = () => {
+      let size = {
+        x: 30,
+        y: 30
+      };
+
+      let margin = 50;
+
+      let pos = {
+        x: -margin + Math.floor( ( Math.random() * ( myGame.wrapper.innerSize.x + margin ) ) ),
+        y: -margin
+      };
+
+      let posDiff = {
+        x: pos.x - this.player.pos.x,
+        y: pos.y - this.player.pos.y
+      };
+
+      let velMult = posDiff.x / posDiff.y;
+
+      let baseVel = 5;
+
+      let vel = {
+        x: baseVel * velMult,
+        y: baseVel
+      };
+
+      this.gameObjects.push( new Enemy( size, pos, vel ) );
+
+      this.numEnemies += 1;
     }
 
     // this.getPosInWrapper = obj => {
@@ -406,23 +440,8 @@
   BeamWeaponAttackHitbox.prototype = Object.create( GameObject.prototype );
   BeamWeaponAttackHitbox.prototype.constructor = BeamWeaponAttackHitbox;
 
-  function Enemy() {
+  function Enemy( size, pos, vel ) {
     let html = $( '.enemy.template' ).clone().removeClass( 'template' );
-
-    let size = {
-      x: 30,
-      y: 30
-    };
-
-    let pos = {
-      x: myGame.wrapper.innerSize.x * 1,
-      y: myGame.wrapper.innerSize.y * 0.75
-    };
-
-    let vel = {
-      x: -5,
-      y: 0
-    }
 
     GameObject.call( this, html, size, pos, true, vel );
 
@@ -442,11 +461,13 @@
         || ( this.pos.y > myGame.wrapper.innerSize.y + this.size.y && this.vel.y > 0 ) ) {
         console.log('dead!')
         this.dead = true;
+        myGame.numEnemies -= 1;
       }
 
       if ( myGame.detectCollision( myGame.player, this ) ) {
         myGame.impact( 15, 3 );
         this.dead = true;
+        myGame.numEnemies -= 1;
         myGame.player.dead = true;
         myGame.player.html.css( 'background', 'none' );
       }
