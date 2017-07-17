@@ -65,6 +65,7 @@
 
       this.gameObjects.forEach( obj => {
         if ( ! obj.dead ) { obj.update(); }
+        if ( ! this.isImpact ) { this.removeTheDead(); }
       } );
     }
 
@@ -74,6 +75,13 @@
 
       this.wrapper.html.css( 'animation', 'none' );
 
+      this.removeTheDead();
+
+      this.isImpact = false;
+      this.allowInput = true;
+    }
+
+    this.removeTheDead = () => {
       let removeGameObjects = [];
 
       this.gameObjects.forEach( ( obj, index ) => {
@@ -85,8 +93,6 @@
       } );
 
       removeGameObjects.forEach( index => this.gameObjects.splice( index, 1 ) );
-
-      this.allowInput = true;
     }
 
     this.addStar = ( offscreen = true ) => {
@@ -123,6 +129,7 @@
     // }
 
     this.impact = ( pauseFrames, screenshakeNum = undefined ) => {
+      this.isImpact = true;
       this.allowInput = false;
       this.pauseFrames = pauseFrames;
       $( '.animated' ).addClass( 'paused' );
