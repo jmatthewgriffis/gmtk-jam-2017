@@ -429,9 +429,12 @@
     this.update = () => {
       this.updateBasic();
 
-      if ( ( this.pos.x < 0 && this.vel.x < 0 )
-        || ( this.pos.x > myGame.wrapper.innerSize.x && this.vel.x > 0 ) ) {
-        this.vel.x *= -1;
+      if ( ( this.pos.x < -this.size.x && this.vel.x < 0 )
+        || ( this.pos.x > myGame.wrapper.innerSize.x + this.size.x && this.vel.x > 0 )
+        || ( this.pos.y < -this.size.y && this.vel.y < 0 )
+        || ( this.pos.y > myGame.wrapper.innerSize.y + this.size.y && this.vel.y > 0 ) ) {
+        console.log('dead!')
+        this.dead = true;
       }
 
       if ( myGame.detectCollision( myGame.player, this ) ) {
