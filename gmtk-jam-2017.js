@@ -460,9 +460,11 @@
         || ( this.pos.x > myGame.wrapper.innerSize.x + this.size.x && this.vel.x > 0 )
         || ( this.pos.y < -this.size.y && this.vel.y < 0 )
         || ( this.pos.y > myGame.wrapper.innerSize.y + this.size.y && this.vel.y > 0 ) ) {
-        console.log('dead!')
-        this.dead = true;
-        myGame.numEnemies -= 1;
+        // console.log('dead!')
+        // this.dead = true;
+        // myGame.numEnemies -= 1;
+        this.vel.x *= -1;
+        this.vel.y *= -1;
       }
 
       if ( myGame.detectCollision( myGame.player, this ) ) {
