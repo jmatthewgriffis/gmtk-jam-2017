@@ -68,6 +68,7 @@
       this.gameObjects.forEach( obj => {
         if ( ! obj.dead ) { obj.update(); }
         if ( ! this.isImpact ) { this.removeTheDead(); }
+        // if ( ! this.numEnemies && ! this.player.dead ) { this.addEnemy(); }
       } );
     }
 
