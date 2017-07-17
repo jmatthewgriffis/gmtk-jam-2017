@@ -480,11 +480,11 @@
             this.isHit = true;
             this.vel.x *= -1.5;
             this.vel.y *= -1.5;
-            if ( this.vel.x >= this.maxVel ) {
-              this.vel.x = this.maxVel;
+            if ( Math.abs( this.vel.x ) >= this.maxVel ) {
+              this.vel.x = this.maxVel * ( this.vel.x < 1 ? -1 : 1 );
             }
-            if ( this.vel.y >= this.maxVel ) {
-              this.vel.y = this.maxVel;
+            if ( Math.abs( this.vel.y ) >= this.maxVel ) {
+              this.vel.y = this.maxVel * ( this.vel.y < 1 ? -1 : 1 );
             }
           }
         } else {
